@@ -32,3 +32,9 @@ ________________________________________________________________________
 
 ____________________ 1. File uploading Process _________________________
 client [select file] -> server [check user authentication token, make validations on file, uploading file, response file id]
+
+
+FUNCITONS 
+user.js
+1. signinUser (check in db, verify and callback)
+2. verifyPassword (bcrypt cpmare)

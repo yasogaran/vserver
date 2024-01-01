@@ -9,5 +9,10 @@ const pool = mysql.createPool({
     database: 'vserver',
 }).promise();
 
+async function getUser(email) {
+    return await pool.query('SELECT * FROM `user` WHERE `email`="' + email + '"');
+}
 
-export default pool;
+module.exports = {
+    getUser
+}

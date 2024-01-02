@@ -29,7 +29,7 @@ async function verifyPassword(password, hash) {
 
 function createJWTToken(userid) {
     const user = { id: userid };
-    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 20 * 60*1000 });
+    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 20 * 60 * 1000 });
 }
 
 function authenticateUser(req, res, next) {
@@ -38,24 +38,27 @@ function authenticateUser(req, res, next) {
         if (token) {
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
                 if (err) {
-                   throw Error ('Invalid Token')
+                    throw Error('Invalid Token')
                 } else {
                     next();
                 }
             })
         } else {
             res.clearCookie('token');
-            throw Error ('Token Not Found')
+            throw Error('Token Not Found')
         }
     } catch (error) {
         res.redirect('/signin')
     }
 }
 
-
+function signoutUser(req, res, next) {
+    res.cookie('token', '', { maxAge: 1 }).redirect('/')
+}
 module.exports = {
     signinUser,
-    authenticateUser
+    authenticateUser,
+    signoutUser
 }
 
 

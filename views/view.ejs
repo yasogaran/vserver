@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VIEW</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-12 col-md-9 bg-warning rounded-3">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="" class="form-label">Path</label>
+                            <input
+                                type="text"
+                                name=""
+                                class="form-control"
+                                id="path"
+                            >
+                        </div>
+                        <div class="col-12 mb-3">
+                            <button class="btn btn-primary" id="btn-submit">View</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <video
+                    id="videoPlayer"
+                    width="650px"
+                    controls
+                    autoplay
+                >
+                    <source src="/stream/1704221192156-3050.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+        <script>
+            const path = document.getElementById('path').value;
+            document.querySelector('#btn-submit').addEventListener('click',function streamVideo(){
+                const streamWindow = window.open(`http://localhost:3000/stream/${path}` , '_blank');
+                
+                if(streamWindow){
+                streamWindow.focus();
+                }
+            })
+        </script>
+    </body>
+</html>

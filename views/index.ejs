@@ -1,14 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VIDEO sERVER</title>
-</head>
-<body>
-    <h1>Video server</h1>
-    <h6>How to use</h6>
-    <p>UPLOADiNG VIDEO</p>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Numquam voluptates expedita minima laborum in harum assumenda, temporibus magni sit architecto?</p>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <title>VIDEO sERVER</title>
+    </head>
+    <body>
+        <div class="container-fluid p-2">
+            <h1 class="text-center">Video server</h1>
+            <div class="row align-items-center justify-content-center">
+                <div class="col-12 col-md-9 col-xxl-6 bg-warning">
+                    <div class="row p-2">
+                        <h6 class="text-center w-fit">Uploade your videos</h6>
+                        <div class="col-12">
+                            <hr class="border border-3 border-primary">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="" class="form-label">Title Of video</label>
+                            <input type="text" id="title" class="form-control">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="formFile" class="form-label">Select file</label>
+                            <input class="form-control bg-warning" type="file" id="file">
+                        </div>
+                        <div class="col-12 col-md-4 mx-auto">
+                            <div class="d-grid">
+                                <button class="btn btn-primary" id="btnUpload">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" p-2 d-none">
+                        <h6>Your file has been uploaded!...</h6>
+                        <h6>File Id = 64xdf8kju966</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.querySelector('#btnUpload').addEventListener('click',(e)=>{
+                e.preventDefault();
+                const title = document.querySelector('#title').value;
+                const fileInput = document.querySelector('#file');
+
+                if(fileInput.files.length ==1){
+                    const file = fileInput.files[0];
+                    const size = Math.round(file.size/1024);
+                    if(size > 1024 * 1024){
+                        alert('files is too large');
+                        return false;
+                    } else{
+                        // FILE TYPE VALIDATION
+                        const filePath = fileInput.value;
+                        const allowedExtension = /(\.mp4|\.mkv)$/i;
+                        if(allowedExtension.exec(filePath)){
+                            console.log(file);
+                            // CHECK TITLE
+                            if(title == ''){
+                                const conf =confirm('Continoue without title');
+                                if(conf){
+                                    uploadFile();
+                                }else{
+                                    return false;
+                                }
+                            }else{
+                                uploadFile();
+                            }
+
+                            function uploadFile(){
+                                const formData = new FormData();
+                                formData.append('title',title);
+                                formData.append('file',file)
+                                
+                                fetch('http://localhost:3000/upload',{
+                                    'method':'post',
+                                    'body':formData,
+                                 
+                                })
+                                .then(res=>res.json())
+                                .then(json=>{console.log(json)})
+                                .catch(err=>console.log(err))
+                            }
+
+
+                        }else{
+                            alert('Invalid File Format');
+                            fileInput.value = '';
+                            return false;
+                        }
+                    }    
+                }else{
+                    alert('Please select a file')
+                }
+
+
+              
+            })
+        </script>
+    </body>
 </html>

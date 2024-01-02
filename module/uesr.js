@@ -5,40 +5,57 @@ const jwt = require('jsonwebtoken')
 
 
 async function signinUser(req, res, next) {
-    const{email,password} = req.body;
+    const { email, password } = req.body;
     try {
         const [result] = await getUser(email);
         if (result.length == 0) {
-            res.json({'msg':'invalid Email or Password'})
+            throw Error('Invalid Email');
         } else {
             if (await verifyPassword(password, result[0].password)) {
                 const token = createJWTToken(result[0].id);
-                console.log(typeof(token));
-                res.cookie('token', token, { httpOnly: true, maxAge: 2 * 60 * 1000 })
-                
-                next();
+                res.status(201).cookie('token', token, { httpOnly: true, maxAge: 20 * 60 * 1000 }).json({ 'msg': 'success' })
             } else {
-                res.json({'msg':'Invalid Email Or Password'})
+                throw Error('Invalid Password');
             }
         }
-    } catch (error) {
-        console.log(error.message);
-        res.status(501).json({ 'msg': 'Please Try again later' })
+    } catch (err) {
+        res.status(501).json({ 'msg': 'Please Try again later', 'error': err.message })
     }
 }
 
 async function verifyPassword(password, hash) {
-   return await bcrypt.compare(password, hash)
+    return await bcrypt.compare(password, hash)
 }
 
 function createJWTToken(userid) {
-    console.log('user id i s'+ userid);
-    const user = { id:userid };
-    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 20 * 60 });
+    const user = { id: userid };
+    return accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 20 * 60*1000 });
 }
 
+function authenticateUser(req, res, next) {
+    try {
+        const token = req.cookies.token;
+        if (token) {
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
+                if (err) {
+                   throw Error ('Invalid Token')
+                } else {
+                    next();
+                }
+            })
+        } else {
+            res.clearCookie('token');
+            throw Error ('Token Not Found')
+        }
+    } catch (error) {
+        res.redirect('/signin')
+    }
+}
+
+
 module.exports = {
-    signinUser
+    signinUser,
+    authenticateUser
 }
 
 

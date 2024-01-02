@@ -13,4 +13,10 @@ const storage = multer.diskStorage({
 })
 const upload = multer({ storage: storage });
 
+
+// SAVE TO DATABASE
+function saveToDb({id, title, path, user, date, size}){}
+
+
+
 module.exports = upload;

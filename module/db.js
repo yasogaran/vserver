@@ -12,7 +12,15 @@ const pool = mysql.createPool({
 async function getUser(email) {
     return await pool.query('SELECT * FROM `user` WHERE `email`="' + email + '"');
 }
+// ADD NEW RECORD TO DB (id is path)
+async function setFile({ path, title, user, date, size }) {
+    const result = await pool.query('INSERT INTO `video`(`path`,`title`,`size`,`user`,`date`) VALUES ("' + path + '","' + title + '","' + size + '","' + user + '","' + date + '")');
+    console.log(result);
+    return result;
+}
+
 
 module.exports = {
-    getUser
+    getUser,
+    setFile,
 }

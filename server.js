@@ -46,8 +46,12 @@ app.post('/upload', authenticateUser, (req, res) => {
 app.get('/view',(req,res)=>{
     res.render('view.ejs');
 })
+app.get('/checkVideo/:pathname',authenticateUser,(res, req)=>{
+    const pathname = req.params.pathname;
+    res.json({'msg':'a'})
+})
 
-app.get('/stream/:pathname', (req,res) => {
+app.get('/stream/:pathname',authenticateUser ,(req,res) => {
     const range = req.headers.range;
     if (!range) {
         res.status(400).send('Requires range header');

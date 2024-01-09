@@ -30,10 +30,54 @@
                             </div>
                         </div>
                     </div>
-                    <div class=" p-2 d-none">
-                        <h6>Your file has been uploaded!...</h6>
-                        <h6>File Id = 64xdf8kju966</h6>
+                </div>
+            </div>
+            <!-- SECOND PART -->
+            <div class="mt-4">
+                <h6>Play your videos</h6>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12 col-md-9 bg-warning rounded-3">
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="" class="form-label">Path</label>
+                                <input
+                                    type="text"
+                                    name=""
+                                    class="form-control"
+                                    id="path"
+                                >
+                            </div>
+                            <div class="col-12 mb-3">
+                                <button class="btn btn-primary" id="btn-submit">View</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li>
+                                Path :
+                                <span id="vpath">1704221192156-3050.mp</span>
+                            </li>
+                            <li>
+                                Title :
+                                <span id="vtitle">Beema</span>
+                            </li>
+                            <li>
+                                Uploaded on :
+                                <span id="vdate">2023-01-02 11:59</span>
+                            </li>
+                        </ul>
                     </div>
+                </div>
+                <div class="ratio ratio-16x9 d-flex p-0 g-0">
+                    <video
+                        id="videoPlayer"
+                        width="650px"
+                        controls
+                        autoplay
+                        class="v100 mx-auto"
+                    >
+                        <source src="/stream/1704221192156-3050.mp4" type="video/mp4">
+                    </video>
                 </div>
             </div>
         </div>
@@ -93,6 +137,20 @@
 
 
               
+            })
+       
+            const path = document.getElementById('path').value;
+            document.querySelector('#btn-submit').addEventListener('click',function streamVideo(){
+                // const streamWindow = window.open(`http://localhost:3000/stream/${path}` , '_blank');
+                    fetch('http://localhost:3000/checkVideo/'+path,{
+                        method:'get',
+                    })
+                    .then(res=>res.json())
+                    .then(json=>{
+                        console.log(json);
+                    })
+                    .catch(err=>console.log(err))
+               
             })
         </script>
     </body>

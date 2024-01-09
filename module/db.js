@@ -15,8 +15,12 @@ async function getUser(email) {
 // ADD NEW RECORD TO DB (id is path)
 async function setFile({ path, title, user, date, size }) {
     const result = await pool.query('INSERT INTO `video`(`path`,`title`,`size`,`user`,`date`) VALUES ("' + path + '","' + title + '","' + size + '","' + user + '","' + date + '")');
-    console.log(result);
     return result;
+}
+
+async function getFile (req, res){
+    const [result] = await pool.query("SELECT * FROM `video` WHERE `path` ='"+req.parms.pathname+"'")
+    res.json(result[0])
 }
 
 
